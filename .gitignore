@@ -1,0 +1,22 @@
+# Build folders
+Debug/
+Release/
+.build/
+
+# Compiled files
+*.elf
+*.hex
+*.bin
+*.map
+*.o
+*.d
+
+# IDE settings
+.settings/
+*.launch
+*.cproject
+*.project
+
+# Backup / temp files
+*.bak
+*.swp
