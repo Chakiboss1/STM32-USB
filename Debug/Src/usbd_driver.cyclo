@@ -1,4 +1,11 @@
-../Src/usbd_driver.c:3:6:initialize_gpio_pins	1
-../Src/usbd_driver.c:16:6:initialize_core	1
-../Src/usbd_driver.c:65:6:connect	1
-../Src/usbd_driver.c:72:6:disconnect	1
+../Inc/usbd_driver.h:12:43:IN_ENDPOINT	1
+../Inc/usbd_driver.h:20:44:OUT_ENDPOINT	1
+../Src/usbd_driver.c:4:6:initialize_gpio_pins	1
+../Src/usbd_driver.c:17:6:initialize_core	1
+../Src/usbd_driver.c:66:6:connect	1
+../Src/usbd_driver.c:73:6:disconnect	1
+../Src/usbd_driver.c:79:13:usbrst_handler	2
+../Src/usbd_driver.c:88:13:configure_endpoint0	1
+../Src/usbd_driver.c:103:13:configure_in_endpoint	1
+../Src/usbd_driver.c:119:13:deconfigure_endpoint	4
+../Src/usbd_driver.c:160:13:gintsts_handler	5

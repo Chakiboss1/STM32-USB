@@ -1,4 +1,5 @@
 #include "usbd_driver.h"
+#include "usb_standards.h"
 
 void initialize_gpio_pins() {
     // Enables the clock for GPIOA
@@ -73,4 +74,112 @@ void disconnect(void)
 {
     SET_BIT(USB_OTG_FS_DEVICE->DCTL, USB_OTG_DCTL_SDIS);
     CLEAR_BIT(USB_OTG_FS_GLOBAL->GCCFG, USB_OTG_GCCFG_PWRDWN);
+}
+
+static void usbrst_handler()
+{
+
+	for (uint8_t i = 0; i <= ENDPOINT_COUNT; i++)
+	{
+	}
+
+}
+
+static void configure_endpoint0(uint8_t endpoint_size){
+	SET_BIT(USB_OTG_FS_DEVICE->DAINTMSK, 1 << 0 | 1 << 16);
+
+	MODIFY_REG(IN_ENDPOINT(0)->DIEPCTL,
+		USB_OTG_DIEPCTL_MPSIZ,
+		USB_OTG_DIEPCTL_USBAEP | _VAL2FLD(USB_OTG_DIEPCTL_MPSIZ, endpoint_size) | USB_OTG_DIEPCTL_SNAK
+	);
+
+	// Clears NAK, and enables endpoint data transmission.
+	SET_BIT(OUT_ENDPOINT(0)->DOEPCTL,
+		USB_OTG_DOEPCTL_EPENA | USB_OTG_DOEPCTL_CNAK
+	);
+
+}
+
+static void configure_in_endpoint(uint8_t endpoint_number, UsbEndpointType endpoint_type, uint16_t endpoint_size)
+{
+	// Unmasks all interrupts of the targeted IN endpoint.
+	SET_BIT(USB_OTG_FS_DEVICE->DAINTMSK, 1 << endpoint_number);
+
+	// Activates the endpoint, sets endpoint handshake to NAK (not ready to send data), sets DATA0 packet identifier,
+	// configures its type, its maximum packet size, and assigns it a TxFIFO.
+	MODIFY_REG(IN_ENDPOINT(endpoint_number)->DIEPCTL,
+		USB_OTG_DIEPCTL_MPSIZ | USB_OTG_DIEPCTL_EPTYP | USB_OTG_DIEPCTL_TXFNUM,
+		USB_OTG_DIEPCTL_USBAEP | _VAL2FLD(USB_OTG_DIEPCTL_MPSIZ, endpoint_size) | USB_OTG_DIEPCTL_SNAK |
+		_VAL2FLD(USB_OTG_DIEPCTL_EPTYP, endpoint_type) | _VAL2FLD(USB_OTG_DIEPCTL_TXFNUM, endpoint_number) | USB_OTG_DIEPCTL_SD0PID_SEVNFRM
+	);
+
+	configure_txfifo_size(endpoint_number, endpoint_size);
+}
+
+static void deconfigure_endpoint(uint8_t endpoint_number)
+{
+    USB_OTG_INEndpointTypeDef *in_endpoint = IN_ENDPOINT(endpoint_number);
+    USB_OTG_OUTEndpointTypeDef *out_endpoint = OUT_ENDPOINT(endpoint_number);
+
+	// Masks all interrupts of the targeted IN and OUT endpoints.
+	CLEAR_BIT(USB_OTG_FS_DEVICE->DAINTMSK,
+		(1 << endpoint_number) | (1 << 16 << endpoint_number)
+	);
+
+	// Clears all interrupts of the endpoint.
+	SET_BIT(in_endpoint->DIEPINT, 0x28FB);
+    SET_BIT(out_endpoint->DOEPINT, 0x303B);
+
+	// Disables the endpoints if possible.
+    if (in_endpoint->DIEPCTL & USB_OTG_DIEPCTL_EPENA)
+    {
+		// Disables endpoint transmission.
+		SET_BIT(in_endpoint->DIEPCTL, USB_OTG_DIEPCTL_EPDIS);
+    }
+
+	// Deactivates the endpoint.
+	CLEAR_BIT(in_endpoint->DIEPCTL, USB_OTG_DIEPCTL_USBAEP);
+
+    if (endpoint_number != 0)
+    {
+		if (out_endpoint->DOEPCTL & USB_OTG_DOEPCTL_EPENA)
+		{
+			// Disables endpoint transmission.
+			SET_BIT(out_endpoint->DOEPCTL, USB_OTG_DOEPCTL_EPDIS);
+		}
+
+		// Deactivates the endpoint.
+		CLEAR_BIT(out_endpoint->DOEPCTL, USB_OTG_DOEPCTL_USBAEP);
+    }
+
+	// Flushes the FIFOs.
+	flush_txfifo(endpoint_number);
+	flush_rxfifo();
+}
+
+static void gintsts_handler()
+{
+	volatile uint32_t gintsts = USB_OTG_FS_GLOBAL->GINTSTS;
+
+	if (gintsts & USB_OTG_GINTSTS_USBRST)
+	{
+
+	}
+	else if (gintsts & USB_OTG_GINTSTS_ENUMDNE)
+	{
+
+	}
+	else if (gintsts & USB_OTG_GINTSTS_RXFLVL)
+	{
+
+	}
+	else if (gintsts & USB_OTG_GINTSTS_IEPINT)
+	{
+
+	}
+	else if (gintsts & USB_OTG_GINTSTS_OEPINT)
+	{
+
+	}
+
 }
