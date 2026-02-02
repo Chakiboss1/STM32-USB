@@ -23,6 +23,31 @@ inline static USB_OTG_OUTEndpointTypeDef * OUT_ENDPOINT(uint8_t endpoint_number)
 }
 
 
+inline static __IO uint32_t *FIFO(uint8_t endpoint_number)
+{
+    return (__IO uint32_t *)(USB_OTG_FS_PERIPH_BASE + USB_OTG_FIFO_BASE + (endpoint_number * 0x1000));
+}
+
+
 #define ENDPOINT_COUNT 6
+
+// \brief USB driver functions exposed to USB framework.
+typedef struct
+{
+	void (*initialize_core)();
+	void (*initialize_gpio_pins)();
+	void (*set_device_address)(uint8_t address);
+	void (*connect)();
+	void (*disconnect)();
+	void (*flush_rxfifo)();
+	void (*flush_txfifo)(uint8_t endpoint_number);
+	void (*configure_in_endpoint)(uint8_t endpoint_number, enum UsbEndpointType endpoint_type, uint16_t endpoint_size);
+	void (*read_packet)(void const *buffer, uint16_t size);
+	void (*write_packet)(uint8_t endpoint_number, void const *buffer, uint16_t size);
+	void (*poll)();
+	// ToDO Add pointers to the other driver functions.
+} UsbDriver;
+
+extern const UsbDriver usb_driver;
 
 #endif /* USBD_DRIVER_H_ */
