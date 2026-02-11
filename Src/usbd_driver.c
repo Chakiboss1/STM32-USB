@@ -67,6 +67,12 @@ void initialize_core(void)
 	SET_BIT(USB_OTG_FS_DEVICE->DIEPMSK, USB_OTG_DIEPMSK_XFRCM);
 }
 
+static void set_device_address(uint8_t address)
+{
+	MODIFY_REG(USB_OTG_FS_DEVICE->DCFG,
+			USB_OTG_DCFG_DAD,
+			_VAL2FLD(USB_OTG_DCFG_DAD,address));
+}
 
 static void refresh_fifo_start_addresses()
 {
@@ -311,6 +317,9 @@ static void usbrst_handler()
 		deconfigure_endpoint(i);
 	}
 
+	usb_events.on_usb_reset_received();
+
+
 }
 
 static void enumdne_handler()
@@ -333,7 +342,7 @@ static void rxflvl_handler()
 	switch (pktsts)
 	{
 	case 0x06: // SETUP packet (includes data).
-//    	usb_events.on_setup_data_received(endpoint_number, bcnt);
+    	usb_events.on_setup_data_received(endpoint_number, bcnt);
     	break;
     case 0x02: // OUT packet (includes data).
     	// ToDo
@@ -386,12 +395,13 @@ static void gintsts_handler()
 		// Clears the interrupt.
 		SET_BIT(USB_OTG_FS_GLOBAL->GINTSTS, USB_OTG_GINTSTS_OEPINT);
 	}
-
+	usb_events.on_usb_polled();
 }
 
 const UsbDriver usb_driver = {
 	.initialize_core = &initialize_core,
 	.initialize_gpio_pins = &initialize_gpio_pins,
+	.set_device_address = &set_device_address,
 	.connect = &connect,
 	.disconnect = &disconnect,
 	.flush_rxfifo = &flush_rxfifo,
@@ -399,5 +409,6 @@ const UsbDriver usb_driver = {
 	.configure_in_endpoint = &configure_in_endpoint,
 	.read_packet = &read_packet,
 	.write_packet = &write_packet,
+	.poll=&gintsts_handler
 };
 

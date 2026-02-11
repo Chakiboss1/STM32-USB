@@ -5,5 +5,6 @@
 #include "usbd_driver.h"
 
 void usbd_initialize() ;
+void usbd_poll();
 
 #endif /* USBD_FRAMEWORK_H_ */

@@ -2,6 +2,7 @@
 #define USBD_DRIVER_H_
 
 #include "stm32f4xx.h"
+#include "usb_standards.h"
 
 /* USB OTG FS base pointers */
 #define USB_OTG_FS_GLOBAL   ((USB_OTG_GlobalTypeDef *)(USB_OTG_FS_PERIPH_BASE + USB_OTG_GLOBAL_BASE))
@@ -49,5 +50,5 @@ typedef struct
 } UsbDriver;
 
 extern const UsbDriver usb_driver;
-
+extern UsbEvents usb_events;
 #endif /* USBD_DRIVER_H_ */
