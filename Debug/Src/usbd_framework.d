@@ -9,7 +9,10 @@ Src/usbd_framework.o: ../Src/usbd_framework.c ../Inc/usbd_framework.h \
  C:/Users/Azur\ Laptop/Documents/Formation\ udemy/Tests\ pour\ formation/USB_Device_F446RE/Inc/CMSIS/Include/mpu_armv7.h \
  C:/Users/Azur\ Laptop/Documents/Formation\ udemy/Tests\ pour\ formation/USB_Device_F446RE/Inc/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h \
  ../Inc/usb_standards.h ../Inc/usbd_driver.h ../Inc/usb_device.h \
- ../Inc/usbd_descriptors.h ../Inc/usb_standards.h
+ ../Inc/usbd_descriptors.h ../Inc/Hid/usb_hid_standards.h \
+ ../Inc/Hid/usb_hid.h ../Inc/Hid/usb_hid_usage_button.h \
+ ../Inc/Hid/usb_hid_usage_desktop.h ../Inc/usb_standards.h \
+ ../Inc/Helpers/math.h
 ../Inc/usbd_framework.h:
 ../Inc/usbd_driver.h:
 C:/Users/Azur\ Laptop/Documents/Formation\ udemy/Tests\ pour\ formation/USB_Device_F446RE/Inc/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:
@@ -24,4 +27,9 @@ C:/Users/Azur\ Laptop/Documents/Formation\ udemy/Tests\ pour\ formation/USB_Devi
 ../Inc/usbd_driver.h:
 ../Inc/usb_device.h:
 ../Inc/usbd_descriptors.h:
+../Inc/Hid/usb_hid_standards.h:
+../Inc/Hid/usb_hid.h:
+../Inc/Hid/usb_hid_usage_button.h:
+../Inc/Hid/usb_hid_usage_desktop.h:
 ../Inc/usb_standards.h:
+../Inc/Helpers/math.h:

@@ -1,5 +1,6 @@
 #include "usbd_driver.h"
 #include "usb_standards.h"
+#include "strings.h"
 
 void initialize_gpio_pins() {
     // Enables the clock for GPIOA
@@ -359,7 +360,35 @@ static void rxflvl_handler()
     	break;
 	}
 }
+/** \brief Handles the interrupt raised when an IN endpoint has a raised interrupt.
+ */
+static void iepint_handler()
+{
+	// Finds the endpoint caused the interrupt.
+	uint8_t endpoint_number = ffs(USB_OTG_FS_DEVICE->DAINT) - 1;
 
+    if (IN_ENDPOINT(endpoint_number)->DIEPINT & USB_OTG_DIEPINT_XFRC)
+    {
+        usb_events.on_in_transfer_completed(endpoint_number);
+        // Clears the interrupt flag.
+        SET_BIT(IN_ENDPOINT(endpoint_number)->DIEPINT, USB_OTG_DIEPINT_XFRC);
+    }
+}
+
+/** \brief Handles the interrupt raised when an OUT endpoint has a raised interrupt.
+ */
+static void oepint_handler()
+{
+	// Finds the endpoint caused the interrupt.
+	uint8_t endpoint_number = ffs(USB_OTG_FS_DEVICE->DAINT >> 16) - 1;
+
+    if (OUT_ENDPOINT(endpoint_number)->DOEPINT & USB_OTG_DOEPINT_XFRC)
+    {
+        usb_events.on_out_transfer_completed(endpoint_number);
+        // Clears the interrupt;
+        SET_BIT(OUT_ENDPOINT(endpoint_number)->DOEPINT, USB_OTG_DOEPINT_XFRC);
+    }
+}
 
 static void gintsts_handler()
 {
@@ -385,14 +414,14 @@ static void gintsts_handler()
 	}
 	else if (gintsts & USB_OTG_GINTSTS_IEPINT)
 	{
-//		iepint_handler();
+		iepint_handler();
 		// Clears the interrupt.
 		SET_BIT(USB_OTG_FS_GLOBAL->GINTSTS, USB_OTG_GINTSTS_IEPINT);
 	}
 	else if (gintsts & USB_OTG_GINTSTS_OEPINT)
 	{
-//		oepint_handler();
-		// Clears the interrupt.
+		oepint_handler();
+//		 Clears the interrupt.
 		SET_BIT(USB_OTG_FS_GLOBAL->GINTSTS, USB_OTG_GINTSTS_OEPINT);
 	}
 	usb_events.on_usb_polled();
