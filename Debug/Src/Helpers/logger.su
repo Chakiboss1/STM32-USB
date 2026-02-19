@@ -1,4 +1,4 @@
-C:/Users/Azur Laptop/Documents/Formation udemy/Tests pour formation/USB_Device_F446RE/Inc/CMSIS/Include/core_cm4.h:2064:26:ITM_SendChar	16	static,ignoring_inline_asm
+/home/chakib-pc/Projects/Embedded/Formation udemy/Tests pour formation/USB_Device_F446RE/Inc/CMSIS/Include/core_cm4.h:2064:26:ITM_SendChar	16	static,ignoring_inline_asm
 ../Src/Helpers/logger.c:13:5:_write	32	static
 ../Src/Helpers/logger.c:22:20:_get_log_level_string	16	static
 ../Src/Helpers/logger.c:35:13:_log	24	static
