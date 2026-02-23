@@ -1,8 +1,0 @@
-../Src/usbd_framework.c:9:6:usbd_initialize	1
-../Src/usbd_framework.c:17:13:process_standard_device_request	3
-../Src/usbd_framework.c:45:13:process_request	2
-../Src/usbd_framework.c:61:13:process_control_transfert_stage	2
-../Src/usbd_framework.c:72:6:usbd_poll	1
-../Src/usbd_framework.c:76:13:usb_reset_received_handler	1
-../Src/usbd_framework.c:85:13:usb_polled_handler	1
-../Src/usbd_framework.c:89:13:setup_data_received_handler	1
