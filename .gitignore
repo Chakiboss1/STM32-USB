@@ -1,22 +1,56 @@
+#######################################
 # Build folders
+#######################################
 Debug/
 Release/
-.build/
+build/
+out/
 
-# Compiled files
-*.elf
-*.hex
-*.bin
-*.map
+#######################################
+# STM32CubeIDE specific
+#######################################
+.metadata/
+*.launch
+
+#######################################
+# Eclipse files
+#######################################
+.project
+.cproject
+
+#######################################
+# Generated files
+#######################################
 *.o
 *.d
+*.elf
+*.map
+*.hex
+*.bin
+*.list
+*.srec
 
-# IDE settings
-.settings/
-*.launch
-*.cproject
-*.project
+#######################################
+# Linker output / memory analysis
+#######################################
+*.su
+*.cyclo
+*.log
 
-# Backup / temp files
+#######################################
+# Index / cache
+#######################################
+*.tmp
 *.bak
 *.swp
+
+#######################################
+# OS files
+#######################################
+.DS_Store
+Thumbs.db
+
+#######################################
+# ST generated temporary folders
+#######################################
+Drivers/CMSIS/DSP/Lib/

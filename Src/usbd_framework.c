@@ -81,7 +81,7 @@ static void process_request() {
 		process_standard_device_request();
 		break;
 //		case USB_BM_REQUEST_TYPE_TYPE_CLASS | USB_BM_REQUEST_TYPE_RECIPIENT_INTERFACE:
-			process_class_interface_request();
+//			process_class_interface_request();
 //		break;
 //		case USB_BM_REQUEST_TYPE_TYPE_STANDARD | USB_BM_REQUEST_TYPE_RECIPIENT_INTERFACE:
 //			process_standard_interface_request();
